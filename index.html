@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegik8s - Fortifying AI workloads on K8s</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(96, 165, 250, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
+            }
+        }
+
+        @keyframes highlightAI {
+            0%, 100% {
+                color: rgba(255, 255, 255, 0.7);
+                text-shadow: none;
+                transform: scale(1);
+            }
+            45%, 55% {
+                color: #60a5fa;
+                text-shadow: 0 0 20px rgba(96, 165, 250, 0.8),
+                            0 0 40px rgba(96, 165, 250, 0.4);
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes highlightK8s {
+            0%, 100% {
+                color: rgba(255, 255, 255, 0.7);
+                text-shadow: none;
+                transform: scale(1);
+            }
+            45%, 55% {
+                color: #a78bfa;
+                text-shadow: 0 0 20px rgba(167, 139, 250, 0.8),
+                            0 0 40px rgba(167, 139, 250, 0.4);
+                transform: scale(1.2);
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(-45deg, #000000, #0a0c1b, #1a1c2d, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: rotate 60s linear infinite;
+            opacity: 0.1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.1), transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 0.1em;
+            background: none;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .title span {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .title .highlight-k8s {
+            animation: highlightAI 4s ease-in-out infinite;
+        }
+
+        .title .highlight-ai {
+            animation: highlightK8s 4s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .intro-text {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .hero-button {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #000000, #1a1c2d, #2d2f3d);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            animation: gradientBG 8s ease infinite;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #1a1c2d, #2d2f3d, #000000);
+        }
+
+        .hero-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Etymology Modal */
+        .etymology-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .etymology-modal.active {
+            display: flex;
+        }
+
+        .etymology-content {
+            max-width: 800px;
+            background: linear-gradient(145deg, #000000, #1a1c2d);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .etymology-title {
+            color: #60a5fa;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .etymology-text {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .etymology-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            text-align: center;
+            color: #e2e8f0;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #000000, #1a1c2d);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .card h3 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .card p {
+            color: #94a3b8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Architecture Section */
+        .architecture-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .architecture-card {
+            background: linear-gradient(145deg, #000000, #1a1c2d);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 16/9;
+            margin-bottom: 2rem;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: all 0.3s ease;
+            transform: scale(1.1);
+            display: block;
+        }
+
+        .video-container.popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50vw;
+            max-width: 800px;
+            height: auto;
+            z-index: 10000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            cursor: default;
+            background: #000;
+        }
+
+        .video-container.popup video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+            display: block;
+            transform: none;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+
+        .video-control-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-control-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .video-control-button i {
+            font-size: 1.2rem;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(96, 165, 250, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .play-button::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 0 12px 20px;
+            border-color: transparent transparent transparent #ffffff;
+            margin-left: 5px;
+        }
+
+        .video-container:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(96, 165, 250, 1);
+        }
+
+        .video-container.playing::before,
+        .video-container.playing .play-button {
+            display: none;
+        }
+
+        .video-container.playing video {
+            transform: scale(1.02);
+        }
+
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(96, 165, 250, 0.3);
+            border-radius: 50%;
+            border-top-color: #60a5fa;
+            animation: spin 1s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .architecture-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .architecture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .architecture-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .architecture-diagram {
+            width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .architecture-card:hover .architecture-diagram {
+            transform: scale(1.02);
+        }
+
+        .demo-video {
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .architecture-card:hover .demo-video {
+            transform: scale(1.02);
+        }
+
+        .architecture-card h3 {
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .architecture-card p {
+            color: #94a3b8;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+            .video-container.popup {
+                width: 90vw;
+            }
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .button-primary {
+            background: linear-gradient(45deg, #000000, #60a5fa, #a78bfa);
+            background-size: 200% 200%;
+            color: white;
+            animation: gradientBG 8s ease infinite;
+        }
+
+        .button-secondary {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+        }
+
+        footer p {
+            color: #94a3b8;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+        }
+
+        /* Capabilities Section */
+        .capabilities-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .capability-card {
+            background: linear-gradient(145deg, #000000, #1a1c2d);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(96, 165, 250, 0.1);
+        }
+
+        .capability-card.highlight {
+            background: linear-gradient(145deg, #1a1c2d, #2d2f3d);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            transform: scale(1.05);
+        }
+
+        .capability-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .capability-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            color: #60a5fa;
+            transition: all 0.3s ease;
+        }
+
+        .capability-card:hover .capability-icon {
+            transform: scale(1.1);
+            color: #a78bfa;
+        }
+
+        .capability-card h3 {
+            color: #60a5fa;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .capability-card p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .capability-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        @media (max-width: 768px) {
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .capability-card.highlight {
+                transform: scale(1);
+            }
+        }
+
+        /* Combined Section Styles */
+        .features-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .features-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .feature-row:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature-row:nth-child(even) .feature-content {
+            direction: ltr;
+        }
+
+        .feature-content {
+            padding: 2rem;
+        }
+
+        .feature-content h3 {
+            color: #60a5fa;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .feature-content p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #60a5fa;
+            margin-bottom: 1rem;
+        }
+
+        .feature-media {
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .feature-media .video-control-button {
+            transition: all 0.3s ease;
+        }
+
+        .feature-media:hover .video-control-button {
+            transform: scale(1.1);
+        }
+
+        .feature-media img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .feature-row {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .feature-row:nth-child(even) {
+                direction: ltr;
+            }
+
+            .feature-content {
+                text-align: center;
+            }
+
+            .feature-content h3,
+            .feature-content p {
+                text-align: center;
+            }
+        }
+
+        /* Feedback Section Styles */
+        .feedback-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .feedback-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .feedback-icon {
+            font-size: 3rem;
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+        }
+
+        .feedback-content h3 {
+            color: #60a5fa;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-content p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .contact-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+            background: linear-gradient(45deg, #000000, #1a1c2d, #2d2f3d);
+            background-size: 200% 200%;
+            color: white;
+            animation: gradientBG 8s ease infinite;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #1a1c2d, #2d2f3d, #000000);
+        }
+
+        .contact-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .contact-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .contact-button.linkedin,
+        .contact-button.email {
+            background: linear-gradient(45deg, #000000, #1a1c2d, #2d2f3d);
+        }
+
+        .feedback-form {
+            background: linear-gradient(145deg, #000000, #1a1c2d);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            background: linear-gradient(45deg, #60a5fa, #a78bfa);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .feedback-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="title">
+                <span class="highlight-ai">A</span>
+                <span>eg</span>
+                <span class="highlight-ai">i</span>
+                <span class="highlight-k8s">k8s</span>
+            </h1>
+            <p class="subtitle">Deploy LLM and Agentic Workloads on Kubernetes—Simple, Secure, and So Easy Even a 5-Year-Old Can Do It!</p>
+            <div class="hero-buttons">
+                <button class="hero-button" onclick="openEtymologyModal()">Story</button>
+                <button class="hero-button" onclick="scrollToNextSection()">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Architecture</h2>
+            <!-- System Architecture -->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <!-- <h3>C</h3> -->
+                        <p>Aegik8s is designed to secure AI workloads on Kubernetes with its comprehensive architecture.</p>
+                    </div>
+                    <div class="feature-media" onclick="openModal()">
+                        <img src="assets/aegik8s_Architecture_Website_Version.jpg" alt="Aegik8s Architecture Diagram" class="architecture-diagram">
+                        <div class="video-controls">
+                            <button class="video-control-button" onclick="openModal()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <br>
+            <br>
+            <h2 class="section-title">Features</h2>
+            <div class="features-grid">
+                <!-- LLM Workloads -->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Deploy LLM Workloads</h3>
+                        <p>Deploy on a single CPU or distribute single model across multiple GPUs with ease and efficiency. Host your own LLM workloads on Kubernetes even 100s of 'em.</p>
+                    </div>
+                    <div class="feature-media">
+                        <div class="video-container" id="llm-video">
+                            <div class="video-loading"></div>
+                            <div class="play-button"></div>
+                            <video autoplay muted loop playsinline>
+                                <source src="assets/compressed/llm-workload-compressed.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-controls">
+                                <button class="video-control-button" onclick="toggleVideoPopup(this.closest('.video-container'))">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <!-- Agentic Workflows -->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Run and Track Agentic Workflows</h3>
+                        <p>Seamlessly manage and monitor your AI agents' activities and performance. See our system in action managing complex agentic workflows.</p>
+                    </div>
+                    <div class="feature-media">
+                        <div class="video-container" id="agentic-video">
+                            <div class="video-loading"></div>
+                            <div class="play-button"></div>
+                            <video autoplay muted loop playsinline>
+                                <source src="assets/compressed/agentic-workload-compressed.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-controls">
+                                <button class="video-control-button" onclick="toggleVideoPopup(this.closest('.video-container'))">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cluster Switching -->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Seamless Cluster Switching (WIP)</h3>
+                        <p>Easily switch between multiple Kubernetes clusters and move workloads between environments. Perfect for transitioning from dev to prod</span>.</p>
+                    </div>
+                    <div class="feature-media">
+                        <div class="video-container" id="cluster-video">
+                            <div class="video-loading"></div>
+                            <div class="play-button"></div>
+                            <video autoplay muted loop playsinline>
+                                <source src="assets/compressed/change-cluster.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-controls">
+                                <button class="video-control-button" onclick="toggleVideoPopup(this.closest('.video-container'))">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Security Features -->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Vulnerability Scanning (WIP)</h3>
+                        <p>Automatically scan and identify potential security vulnerabilities in your workloads. Explore the built-in security features protecting your AI workloads.</p>
+                    </div>
+                    <div class="feature-media">
+                        <div class="video-container" id="security-video">
+                            <div class="video-loading"></div>
+                            <div class="play-button"></div>
+                            <video autoplay muted loop playsinline>
+                                <source src="assets/compressed/security.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-controls">
+                                <button class="video-control-button" onclick="toggleVideoPopup(this.closest('.video-container'))">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring -->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Workload Monitoring (WIP)</h3>
+                        <p>Comprehensive monitoring system for your AI workloads. Track performance, resource usage, and system health in real-time.</p>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Secure Testing Environment</h3>
+                        <p>Provides a secure sandbox environment to test and validate workloads before deployment to production clusters.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section class="feedback-section">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="feedback-grid">
+                <div class="feedback-content">
+                    <div class="feedback-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Let's Connect</h3>
+                    <p>Whether you're interested in learning more about AegiK8s, want to see a live demo, or just want to chat about AI and Kubernetes, I'd love to hear from you! Drop me an email at sainath@utexas.edu 🤘 or connect with me on LinkedIn!</p>
+                    <div class="contact-buttons">
+                        <a href="https://www.linkedin.com/in/sainath98/" class="contact-button linkedin">
+                            <i class="fab fa-linkedin"></i>
+                            Connect on LinkedIn
+                        </a>
+                        <a href="mailto:sainath@utexas.edu" class="contact-button email">
+                            <i class="fas fa-envelope"></i>
+                            Email Me
+                        </a>
+                    </div>
+                </div>
+                <div class="feedback-content">
+                    <div class="feedback-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>About Me</h3>
+                    <p>Hi, I'm Sainath! 🤘</p>
+                    <p>I'm currently pursuing my Master's at <a href="https://www.utexas.edu/" target="_blank" style="color: #60a5fa; text-decoration: none; transition: all 0.3s ease;">UT Austin</a>, and I'm exploring the intersection of AI and Kubernetes. I love food trucks and petting furry friends.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Etymology Modal -->
+    <div class="etymology-modal" id="etymologyModal">
+        <div class="etymology-content">
+            <button class="etymology-close" onclick="closeEtymologyModal()">&times;</button>
+            <h2 class="etymology-title">The Story Behind AegiK8s</h2>
+            <p class="etymology-text">
+                The name AegiK8s is inspired by Aegis (EE-jis), the legendary shield of Zeus and Athena in Greek mythology, symbolizing divine protection and invincibility. Just as the Aegis shield safeguarded gods and warriors, AegiK8s provides a secure, resilient, and powerful shield for deploying AI workloads on Kubernetes (K8s).
+            </p>
+            <p class="etymology-text">
+                By combining "Aegis" (protection) + "K8s" (Kubernetes), AegiK8s embodies security, simplicity, and strength—ensuring that deploying and managing AI workloads is as effortless as it is secure.
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal for Architecture Diagram -->
+    <div class="modal" id="architectureModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <img src="assets/aegik8s_Architecture_Website_Version.jpg" alt="Aegik8s Architecture Diagram" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
+    <script>
+        // Smooth scroll function
+        function scrollToNextSection() {
+            const nextSection = document.querySelector('.features-section');
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('architectureModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('architectureModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Etymology Modal functions
+        function openEtymologyModal() {
+            document.getElementById('etymologyModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEtymologyModal() {
+            document.getElementById('etymologyModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('architectureModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('etymologyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEtymologyModal();
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeEtymologyModal();
+            }
+        });
+
+        // Video handling
+        document.querySelectorAll('.video-container').forEach(container => {
+            const video = container.querySelector('video');
+            const playButton = container.querySelector('.play-button');
+            const loading = container.querySelector('.video-loading');
+
+            // Remove loading spinner when video is ready
+            video.addEventListener('loadeddata', () => {
+                loading.style.display = 'none';
+            });
+
+            // Play/pause on container click
+            container.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                    container.classList.add('playing');
+                } else {
+                    video.pause();
+                    container.classList.remove('playing');
+                }
+            });
+
+            // Update container state when video plays/pauses
+            video.addEventListener('play', () => {
+                container.classList.add('playing');
+            });
+
+            video.addEventListener('pause', () => {
+                container.classList.remove('playing');
+            });
+        });
+
+        function toggleVideoPopup(container) {
+            const video = container.querySelector('video');
+            const loading = container.querySelector('.video-loading');
+            
+            // Reset video to start
+            video.currentTime = 0;
+            
+            // Hide loading spinner
+            loading.style.display = 'none';
+            
+            // Request fullscreen
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.mozRequestFullScreen) {
+                video.mozRequestFullScreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen();
+            }
+
+            // Ensure video is muted for autoplay
+            video.muted = true;
+            
+            // Play the video
+            video.play().catch(error => {
+                console.log('Autoplay failed:', error);
+                // If autoplay fails, try playing with user interaction
+                video.muted = true;
+                video.play();
+            });
+        }
+
+        function closeVideoPopup(container, overlay, wasPlaying, currentTime) {
+            const video = container.querySelector('video');
+            
+            container.classList.remove('popup');
+            overlay.classList.remove('active');
+            
+            // Restore video state
+            video.currentTime = currentTime;
+            if (wasPlaying) {
+                video.play();
+            } else {
+                video.pause();
+            }
+            
+            setTimeout(() => {
+                overlay.remove();
+            }, 300);
+        }
+
+        // Update video container click handler
+        document.querySelectorAll('.video-container').forEach(container => {
+            const video = container.querySelector('video');
+            const playButton = container.querySelector('.play-button');
+            const loading = container.querySelector('.video-loading');
+
+            // Remove loading spinner when video is ready
+            video.addEventListener('loadeddata', () => {
+                loading.style.display = 'none';
+            });
+
+            // Play/pause on container click (only if not in popup mode)
+            container.addEventListener('click', (e) => {
+                // Don't trigger play/pause if clicking the expand button
+                if (e.target.closest('.video-control-button')) {
+                    return;
+                }
+                
+                if (!container.classList.contains('popup')) {
+                    if (video.paused) {
+                        video.play();
+                        container.classList.add('playing');
+                        loading.style.display = 'none'; // Hide loading when playing
+                    } else {
+                        video.pause();
+                        container.classList.remove('playing');
+                    }
+                }
+            });
+
+            // Update container state when video plays/pauses
+            video.addEventListener('play', () => {
+                container.classList.add('playing');
+                loading.style.display = 'none'; // Hide loading when playing starts
+            });
+
+            video.addEventListener('pause', () => {
+                container.classList.remove('playing');
+            });
+
+            // Ensure video is muted for autoplay
+            video.muted = true;
+        });
+    </script>
+</body>
+</html> 
