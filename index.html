@@ -1061,6 +1061,7 @@
             <div class="hero-buttons">
                 <button class="hero-button" onclick="openEtymologyModal()">Story</button>
                 <button class="hero-button" onclick="scrollToNextSection()">Learn More</button>
+                <button class="hero-button" onclick="openPosterModal()">Poster</button>
             </div>
         </div>
     </div>
@@ -1097,8 +1098,9 @@
                         <div class="feature-icon">
                             <i class="fas fa-rocket"></i>
                         </div>
-                        <h3>Deploy LLM Workloads</h3>
+                        <h3>LLM Workloads</h3>
                         <p>Deploy on a single CPU or distribute single model across multiple GPUs with ease and efficiency. Host your own LLM workloads on Kubernetes even 100s of 'em.</p>
+                        <a href="#llm-workloads" class="feature-button">Learn More</a>
                     </div>
                     <div class="feature-media">
                         <div class="video-container" id="llm-video">
@@ -1119,14 +1121,15 @@
 
                 
 
-                <!-- Agentic Workflows -->
+                <!-- Agentic Workloads -->
                 <div class="feature-row">
                     <div class="feature-content">
                         <div class="feature-icon">
                             <i class="fas fa-robot"></i>
                         </div>
-                        <h3>Run and Track Agentic Workflows</h3>
-                        <p>Seamlessly manage and monitor your AI agents' activities and performance. See our system in action managing complex agentic workflows.</p>
+                        <h3>Agentic Workloads</h3>
+                        <p>Deploy and manage agentic workloads with ease. AegiK8s provides a seamless experience for running autonomous agents on Kubernetes.</p>
+                        <a href="#agentic-workloads" class="feature-button">Learn More</a>
                     </div>
                     <div class="feature-media">
                         <div class="video-container" id="agentic-video">
@@ -1176,8 +1179,9 @@
                         <div class="feature-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Vulnerability Scanning (WIP)</h3>
-                        <p>Automatically scan and identify potential security vulnerabilities in your workloads. Explore the built-in security features protecting your AI workloads.</p>
+                        <h3>Security</h3>
+                        <p>Built-in security features ensure your workloads are protected. AegiK8s provides comprehensive security measures for your AI deployments.</p>
+                        <a href="#security" class="feature-button">Learn More</a>
                     </div>
                     <div class="feature-media">
                         <div class="video-container" id="security-video">
@@ -1272,6 +1276,29 @@
             <img src="assets/aegik8s_Architecture_Website_Version.jpg" alt="Aegik8s Architecture Diagram" style="max-width: 100%; height: auto;">
         </div>
     </div>
+
+    <!-- Poster Modal -->
+    <div class="modal" id="posterModal">
+        <div class="modal-content" style="width: 100vw; height: 100vh; max-width: none; max-height: none; padding: 0; overflow: hidden; position: relative;">
+            <button class="modal-close" onclick="closePosterModal()" style="position: fixed; top: 30px; right: 30px; background: #000; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold; border: 3px solid white; box-shadow: 0 0 15px rgba(255,255,255,0.8); z-index: 10001; cursor: pointer;">&times;</button>
+            <div class="pdf-container" style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+                <object 
+                    data="assets/poster.pdf#toolbar=0&navpanes=0&scrollbar=0" 
+                    type="application/pdf"
+                    style="width: 100%; height: 100%; border: none; transform-origin: center center; will-change: transform;"
+                    sandbox="allow-scripts allow-same-origin"
+                    allow="fullscreen"
+                    allowfullscreen
+                    webkitallowfullscreen
+                    mozallowfullscreen
+                    msallowfullscreen
+                >
+                    <p>It appears you don't have a PDF plugin for this browser. You can <a href="assets/poster.pdf">click here to download the PDF file.</a></p>
+                </object>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Smooth scroll function
         function scrollToNextSection() {
@@ -1448,6 +1475,114 @@
 
             // Ensure video is muted for autoplay
             video.muted = true;
+        });
+
+        // Poster Modal functions
+        function openPosterModal() {
+            document.getElementById('posterModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePosterModal() {
+            document.getElementById('posterModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close poster modal when clicking outside
+        document.getElementById('posterModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePosterModal();
+            }
+        });
+
+        // Update Escape key handler to include poster modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeEtymologyModal();
+                closePosterModal();
+            }
+        });
+
+        // Optimized PDF viewer handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const posterModal = document.getElementById('posterModal');
+            const pdfContainer = posterModal.querySelector('.pdf-container');
+            const object = posterModal.querySelector('object');
+            
+            let initialDistance = 0;
+            let currentScale = 1;
+            let lastScale = 1;
+            let isScaling = false;
+            let rafId = null;
+            
+            // Debounce function to limit event frequency
+            function debounce(func, wait) {
+                let timeout;
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), wait);
+                };
+            }
+            
+            // Optimized scale update function
+            const updateScale = debounce((scale) => {
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                }
+                
+                rafId = requestAnimationFrame(() => {
+                    object.style.transform = `scale(${scale})`;
+                    lastScale = scale;
+                });
+            }, 16); // ~60fps
+            
+            object.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 2) {
+                    isScaling = true;
+                    initialDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            });
+            
+            object.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 2 && isScaling) {
+                    e.preventDefault();
+                    const currentDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    
+                    const scale = currentDistance / initialDistance;
+                    currentScale = Math.min(Math.max(0.5, lastScale * scale), 3);
+                    updateScale(currentScale);
+                }
+            });
+            
+            object.addEventListener('touchend', function() {
+                isScaling = false;
+                initialDistance = 0;
+            });
+
+            // Add smooth scrolling
+            pdfContainer.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const delta = e.deltaY;
+                const currentScroll = pdfContainer.scrollTop;
+                const newScroll = currentScroll + delta;
+                
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                }
+                
+                rafId = requestAnimationFrame(() => {
+                    pdfContainer.scrollTop = newScroll;
+                });
+            }, { passive: false });
         });
     </script>
 </body>
