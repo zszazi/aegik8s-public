@@ -1046,6 +1046,47 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .security-levels {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .security-level {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .security-icon {
+            margin-top: 0.25rem;
+        }
+
+        .security-icon i {
+            font-size: 1rem;
+        }
+
+        .text-gray-500 {
+            color: #6b7280;
+        }
+
+        .text-blue-500 {
+            color: #3b82f6;
+        }
+
+        .text-purple-500 {
+            color: #8b5cf6;
+        }
+
+        .font-bold {
+            font-weight: 600;
+        }
+
+        .font-normal {
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
@@ -1100,14 +1141,13 @@
                         </div>
                         <h3>LLM Workloads</h3>
                         <p>Deploy on a single CPU or distribute single model across multiple GPUs with ease and efficiency. Host your own LLM workloads on Kubernetes even 100s of 'em.</p>
-                        <a href="#llm-workloads" class="feature-button">Learn More</a>
                     </div>
                     <div class="feature-media">
                         <div class="video-container" id="llm-video">
                             <div class="video-loading"></div>
                             <div class="play-button"></div>
                             <video autoplay muted loop playsinline>
-                                <source src="assets/compressed/llm-workload-compressed.mp4" type="video/mp4">
+                                <source src="assets/compressed/llm-workload-v2-compressed.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             <div class="video-controls">
@@ -1129,14 +1169,13 @@
                         </div>
                         <h3>Agentic Workloads</h3>
                         <p>Deploy and manage agentic workloads with ease. AegiK8s provides a seamless experience for running autonomous agents on Kubernetes.</p>
-                        <a href="#agentic-workloads" class="feature-button">Learn More</a>
                     </div>
                     <div class="feature-media">
                         <div class="video-container" id="agentic-video">
                             <div class="video-loading"></div>
                             <div class="play-button"></div>
                             <video autoplay muted loop playsinline>
-                                <source src="assets/compressed/agentic-workload-compressed.mp4" type="video/mp4">
+                                <source src="assets/compressed/agentic-workload-v2-compressed.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             <div class="video-controls">
@@ -1181,7 +1220,6 @@
                         </div>
                         <h3>Security</h3>
                         <p>Built-in security features ensure your workloads are protected. AegiK8s provides comprehensive security measures for your AI deployments.</p>
-                        <a href="#security" class="feature-button">Learn More</a>
                     </div>
                     <div class="feature-media">
                         <div class="video-container" id="security-video">
@@ -1215,6 +1253,26 @@
                         </div>
                         <h3>Secure Testing Environment</h3>
                         <p>Provides a secure sandbox environment to test and validate workloads before deployment to production clusters.</p>
+                        <div class="security-levels">
+                            <div class="security-level">
+                                <div class="security-icon">
+                                    <i class="fas fa-circle-dot text-gray-500"></i>
+                                </div>
+                                <span><span class="font-bold">Standard</span>: <span class="font-normal">Basic security with standard isolation measures</span></span>
+                            </div>
+                            <div class="security-level">
+                                <div class="security-icon">
+                                    <i class="fas fa-lock text-blue-500"></i>
+                                </div>
+                                <span><span class="font-bold">Isolated</span>: <span class="font-normal">Enhanced security with software-level isolation</span></span>
+                            </div>
+                            <div class="security-level">
+                                <div class="security-icon">
+                                    <i class="fas fa-shield text-purple-500"></i>
+                                </div>
+                                <span><span class="font-bold">Isolated+</span>: <span class="font-normal">Maximum security with both hardware and software isolation</span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
