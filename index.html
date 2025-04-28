@@ -1051,21 +1051,99 @@
             margin-top: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 1rem;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(26, 28, 45, 0.2));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(96, 165, 250, 0.1);
+            backdrop-filter: blur(5px);
         }
 
         .security-level {
             display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.1), rgba(26, 28, 45, 0.1));
+        }
+
+        .security-level:hover {
+            transform: translateX(5px);
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(26, 28, 45, 0.2));
         }
 
         .security-icon {
-            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(26, 28, 45, 0.3));
+            transition: all 0.3s ease;
+        }
+
+        .security-level:hover .security-icon {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.2);
         }
 
         .security-icon i {
-            font-size: 1rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .security-level:hover .security-icon i {
+            transform: scale(1.2);
+        }
+
+        .security-text {
+            flex: 1;
+        }
+
+        .security-text .font-bold {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: #e2e8f0;
+        }
+
+        .security-text .font-normal {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        @keyframes pulse-icon {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .security-icon i {
+            animation: pulse-icon 2s ease-in-out infinite;
+        }
+
+        .security-level:nth-child(1) .security-icon i {
+            animation-delay: 0s;
+        }
+
+        .security-level:nth-child(2) .security-icon i {
+            animation-delay: 0.5s;
+        }
+
+        .security-level:nth-child(3) .security-icon i {
+            animation-delay: 1s;
         }
 
         .text-gray-500 {
@@ -1212,7 +1290,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Security Features -->
+
                 <div class="feature-row">
                     <div class="feature-content">
                         <div class="feature-icon">
@@ -1238,7 +1316,48 @@
                     </div>
                 </div>
 
-                <!-- Monitoring -->
+
+                <!-- isolation-->
+                <div class="feature-row">
+                    <div class="feature-content">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Security</h3>
+                        <p>Built-in security features ensure your workloads are protected. AegiK8s provides comprehensive security measures for your AI deployments.</p>
+                    </div>
+                    <div class="security-levels">
+                        <div class="security-level">
+                            <div class="security-icon">
+                                <i class="fas fa-circle-dot text-gray-500"></i>
+                            </div>
+                            <div class="security-text">
+                                <span class="font-bold">Standard</span>
+                                <span class="font-normal">Basic security with standard isolation measures</span>
+                            </div>
+                        </div>
+                        <div class="security-level">
+                            <div class="security-icon">
+                                <i class="fas fa-lock text-blue-500"></i>
+                            </div>
+                            <div class="security-text">
+                                <span class="font-bold">Isolated</span>
+                                <span class="font-normal">Enhanced security with software-level isolation</span>
+                            </div>
+                        </div>
+                        <div class="security-level">
+                            <div class="security-icon">
+                                <i class="fas fa-shield text-purple-500"></i>
+                            </div>
+                            <div class="security-text">
+                                <span class="font-bold">Isolated+</span>
+                                <span class="font-normal">Maximum security with both hardware and software isolation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="feature-row">
                     <div class="feature-content">
                         <div class="feature-icon">
@@ -1247,31 +1366,12 @@
                         <h3>Workload Monitoring (WIP)</h3>
                         <p>Comprehensive monitoring system for your AI workloads. Track performance, resource usage, and system health in real-time.</p>
                     </div>
-                    <div class="feature-content">
-                        <div class="feature-icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <h3>Secure Testing Environment</h3>
-                        <p>Provides a secure sandbox environment to test and validate workloads before deployment to production clusters.</p>
-                        <div class="security-levels">
-                            <div class="security-level">
-                                <div class="security-icon">
-                                    <i class="fas fa-circle-dot text-gray-500"></i>
-                                </div>
-                                <span><span class="font-bold">Standard</span>: <span class="font-normal">Basic security with standard isolation measures</span></span>
-                            </div>
-                            <div class="security-level">
-                                <div class="security-icon">
-                                    <i class="fas fa-lock text-blue-500"></i>
-                                </div>
-                                <span><span class="font-bold">Isolated</span>: <span class="font-normal">Enhanced security with software-level isolation</span></span>
-                            </div>
-                            <div class="security-level">
-                                <div class="security-icon">
-                                    <i class="fas fa-shield text-purple-500"></i>
-                                </div>
-                                <span><span class="font-bold">Isolated+</span>: <span class="font-normal">Maximum security with both hardware and software isolation</span></span>
-                            </div>
+                    <div class="feature-media">
+                        <img src="assets/monitoring-v2.png" alt="Workload Monitoring Dashboard" class="architecture-diagram">
+                        <div class="video-controls">
+                            <button class="video-control-button" onclick="openModal()">
+                                <i class="fas fa-expand"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
